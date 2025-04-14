@@ -69,7 +69,7 @@ class _WiFiFormScreenState extends State<WiFiFormScreen> {
 
     try {
       final response = await http.post(
-        Uri.parse("http://192.168.4.1/submit"), // Replace with Pi's AP IP
+        Uri.parse("http://192.168.18.83/submit"), // Replace with Pi's AP IP
         body: {"ssid": _ssid, "password": _password},
       );
 
