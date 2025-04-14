@@ -1,1 +1,3 @@
-# scenescribe-app
+# flutter_application_v1
+
+A new Flutter project.
