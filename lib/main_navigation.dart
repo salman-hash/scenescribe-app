@@ -15,7 +15,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
   final List<Widget> _screens = [
     HomeScreen(), // Your existing main screen (now HomeScreen)
     DeviceStatusScreen(), // New devices tab
-    ProfileTabScreen(), // New profile tab
+    AboutTabScreen(), // New profile tab
   ];
 
   @override
@@ -23,7 +23,11 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
+        currentIndex: _currentIndex,      
+        selectedItemColor: Colors.blue, // Dark blue for selected
+        unselectedItemColor: Colors.grey, // Medium grey for unselected
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.normal),
         onTap: (index) => setState(() => _currentIndex = index),
         items: [
           BottomNavigationBarItem(
@@ -58,12 +62,41 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
   }
 }
 
-class ProfileTabScreen extends StatelessWidget {
+class AboutTabScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Profile')),
-      body: Center(child: Text('Profile information content')),
+      appBar: AppBar(title: Text('About')),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('SceneScribe VR Device', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
+            Text('Our VR device features:', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            _buildBulletPoint('90Hz refresh rate'),
+            _buildBulletPoint('6DoF tracking'),
+            _buildBulletPoint('4K resolution per eye'),
+            SizedBox(height: 20),
+            Text('Version: 2.3.1', style: TextStyle(color: Colors.grey)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBulletPoint(String text) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('• ', style: TextStyle(fontSize: 16)),
+          Expanded(child: Text(text)),
+        ],
+      ),
     );
   }
 }
