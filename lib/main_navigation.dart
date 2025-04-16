@@ -14,7 +14,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
   
   final List<Widget> _screens = [
     HomeScreen(), // Your existing main screen (now HomeScreen)
-    DevicesTabScreen(), // New devices tab
+    DeviceStatusScreen(), // New devices tab
     ProfileTabScreen(), // New profile tab
   ];
 
@@ -31,7 +31,7 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.devices),
+            icon: _buildCustomIcon('assets/vr_icon.png', isActive: _currentIndex == 1),
             label: 'Devices',
           ),
           BottomNavigationBarItem(
@@ -42,14 +42,18 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
       ),
     );
   }
-}
 
-class DevicesTabScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Devices')),
-      body: Center(child: Text('Devices management content')),
+  Widget _buildCustomIcon(String assetPath, {bool isActive = false}) {
+    return ColorFiltered(
+      colorFilter: ColorFilter.mode(
+        isActive ? Colors.blue : Colors.grey, // Active/inactive colors
+        BlendMode.srcIn, // Applies color to all non-transparent pixels
+      ),
+      child: Image.asset(
+        assetPath,
+        width: 24, // Standard icon size
+        height: 24,
+      ),
     );
   }
 }
@@ -63,3 +67,4 @@ class ProfileTabScreen extends StatelessWidget {
     );
   }
 }
+
