@@ -48,10 +48,10 @@ class DeviceStatusScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 10),
               // Activation Button (simplified)
               SizedBox(
                 width: double.infinity,
-                height: 10,
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 16),

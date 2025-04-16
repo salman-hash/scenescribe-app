@@ -38,8 +38,8 @@ class _MainNavigationWrapperState extends State<MainNavigationWrapper> {
             label: 'Devices',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
+            icon: Icon(Icons.info),
+            label: 'About',
           ),
         ],
       ),

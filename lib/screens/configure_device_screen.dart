@@ -56,7 +56,7 @@ class ConfigureDeviceScreen extends StatelessWidget {
               onPressed: () {
                 // Activation logic
               },
-              child: Text('Load Configuration', style: TextStyle(color: Colors.blue)),
+              child: Text('Load Configuration', style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
                 backgroundColor: Colors.blue,
