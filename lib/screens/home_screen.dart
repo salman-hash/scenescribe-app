@@ -4,12 +4,12 @@ import 'device_status_screen.dart';
 import 'activate_device_screen.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
-class MainScreen extends StatefulWidget {  // Changed to StatefulWidget
+class HomeScreen extends StatefulWidget {  // Changed to StatefulWidget
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late AnimationController _controller;
   bool _isScanning = false;
   List<WiFiAccessPoint> _devices = [];
