@@ -1,8 +1,8 @@
 // main_navigation.dart
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
-import 'device_status_screen.dart';
-import 'activate_device_screen.dart';
+import 'screens/home_screen.dart';
+import 'screens/device_status_screen.dart';
+import 'screens/activate_device_screen.dart';
 
 class MainNavigationWrapper extends StatefulWidget {
   @override
