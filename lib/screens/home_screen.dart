@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../second_screen.dart';
 import 'device_status_screen.dart';
-import 'activate_device_screen.dart';
+import 'configure_device_screen.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
 class HomeScreen extends StatefulWidget {  // Changed to StatefulWidget
@@ -108,10 +107,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             ),
             ListTile(
               leading: Icon(Icons.power_settings_new),
-              title: Text('Activate Your Device'),
+              title: Text('Configure Your Device'),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.push(context, MaterialPageRoute(builder: (_) => ActivateDeviceScreen()));
+                Navigator.push(context, MaterialPageRoute(builder: (_) => ConfigureDeviceScreen()));
               },
             ),
             ListTile(

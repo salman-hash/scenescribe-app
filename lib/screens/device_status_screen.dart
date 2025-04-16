@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'configure_device_screen.dart';
 class DeviceStatusScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -48,8 +48,36 @@ class DeviceStatusScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              // Activation Button (simplified)
+              SizedBox(
+                width: double.infinity,
+                height: 10,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    backgroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    // Add activation logic here
+                    print('Device Configuration Screen initiated');
+                    // Or navigate to activation screen:
+                    Navigator.push(context, MaterialPageRoute(
+                      builder: (_) => ConfigureDeviceScreen()));
+                  },
+                  child: Text(
+                    'Configure Device',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
               
+              SizedBox(height: 10),
               // Function Cards
               _buildFunctionCard(
                 'Performance Metrics',
@@ -60,7 +88,7 @@ class DeviceStatusScreen extends StatelessWidget {
                 ],
               ),
               
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               
               _buildFunctionCard(
                 'Tracking Status',
@@ -72,7 +100,7 @@ class DeviceStatusScreen extends StatelessWidget {
                 ],
               ),
               
-              SizedBox(height: 20),
+              SizedBox(height: 10),
               
               _buildFunctionCard(
                 'Session Info',
