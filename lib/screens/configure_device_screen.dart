@@ -1,6 +1,50 @@
 import 'package:flutter/material.dart';
+import '../wifi/wifi_config_modal.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class ConfigureDeviceScreen extends StatelessWidget {
+class ConfigureDeviceScreen extends StatefulWidget {
+  @override
+  State<ConfigureDeviceScreen> createState() => _ConfigureDeviceScreenState();
+}
+
+class _ConfigureDeviceScreenState extends State<ConfigureDeviceScreen> {
+  String selectedSsid = '';
+  String password = '';
+
+  Future<void> _connectToWifi() async {
+    if (selectedSsid.isEmpty || password.isEmpty) return;
+    try {
+      final response = await http.post(
+        Uri.parse('http://192.168.4.1:5000/connect-wifi'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'ssid': selectedSsid, 'password': password}),
+      );
+      final data = json.decode(response.body);
+      print("Wi-Fi connect response: \$data");
+    } catch (e) {
+      print("Connection error: \$e");
+    }
+  }
+
+  void _openWifiConfigModal() async {
+    final result = await showModalBottomSheet<Map<String, String>>(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => WifiConfigModal(),
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedSsid = result['ssid'] ?? '';
+        password = result['password'] ?? '';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +87,8 @@ class ConfigureDeviceScreen extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.wifi),
               title: Text('WiFi Settings'),
-              subtitle: Text('Connected to HomeNetwork'),
+              subtitle: Text(selectedSsid.isEmpty ? 'Not configured' : 'SSID: \$selectedSsid'),
+              onTap: _openWifiConfigModal,
             ),
             ListTile(
               leading: Icon(Icons.developer_mode),
@@ -53,9 +98,7 @@ class ConfigureDeviceScreen extends StatelessWidget {
             ),
             Spacer(),
             ElevatedButton(
-              onPressed: () {
-                // Activation logic
-              },
+              onPressed: _connectToWifi,
               child: Text('Load Configuration', style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
@@ -63,7 +106,6 @@ class ConfigureDeviceScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                
               ),
             ),
           ],
