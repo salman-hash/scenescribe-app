@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ActivateDeviceScreen extends StatelessWidget {
+class ConfigureDeviceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Activate Your Device'),
+        title: Text('Configure Your Device'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -56,9 +56,14 @@ class ActivateDeviceScreen extends StatelessWidget {
               onPressed: () {
                 // Activation logic
               },
-              child: Text('Activate Device'),
+              child: Text('Load Configuration', style: TextStyle(color: Colors.white)),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
+                backgroundColor: Colors.blue,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                
               ),
             ),
           ],
