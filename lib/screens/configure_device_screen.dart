@@ -4,6 +4,7 @@ import 'dart:convert';
 import '../wifi/wifi_config_modal.dart';
 import '../modals/status_modal.dart';
 import '../modals/language_modal.dart';
+import '../modals/bluetooth_modal.dart';
 
 class ConfigureDeviceScreen extends StatefulWidget {
   @override
@@ -99,10 +100,15 @@ class _ConfigureDeviceScreenState extends State<ConfigureDeviceScreen> {
             ),
             ListTile(
               leading: Icon(Icons.bluetooth),
-              title: Text('Bluetooth Audio Device'),
-              subtitle: Text('Not connected'),
-              onTap: () {},
+              title: Text('Bluetooth Devices'),
+              subtitle: Text('Tap to scan and pair'),
+              trailing: Icon(Icons.arrow_forward_ios),
+              onTap: () => showDialog(
+                context: context,
+                builder: (_) => const BluetoothModal(),
+              ),
             ),
+
             ListTile(
               leading: Icon(Icons.wifi),
               title: Text('WiFi Settings'),
