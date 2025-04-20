@@ -1,6 +1,77 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import '../wifi/wifi_config_modal.dart';
+import '../modals/status_modal.dart';
 
-class ConfigureDeviceScreen extends StatelessWidget {
+class ConfigureDeviceScreen extends StatefulWidget {
+  @override
+  _ConfigureDeviceScreenState createState() => _ConfigureDeviceScreenState();
+}
+
+class _ConfigureDeviceScreenState extends State<ConfigureDeviceScreen> {
+  String selectedSsid = '';
+  String password = '';
+  bool isConnecting = false;
+
+  Future<void> _connectToWifi() async {
+    if (selectedSsid.isEmpty || password.isEmpty) return;
+    setState(() => isConnecting = true);
+
+    try {
+      final response = await http.post(
+        Uri.parse('http://192.168.4.1:5000/connect-wifi'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'ssid': selectedSsid, 'password': password}),
+      );
+      final data = json.decode(response.body);
+
+      showDialog(
+        context: context,
+        builder: (_) => StatusModal(
+          icon: data['status'] == 'connected'
+              ? Icons.check_circle_outline
+              : Icons.error_outline,
+          title: data['status'] == 'connected' ? 'Success' : 'Error',
+          message: data['status'] == 'connected'
+              ? 'Successfully connected to Wi-Fi!'
+              : 'Failed to connect. Please try again.',
+          closable: true,
+        ),
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (_) => const StatusModal(
+          icon: Icons.error_outline,
+          title: 'Error',
+          message: 'Connection failed. Please try again.',
+          closable: true,
+        ),
+      );
+    } finally {
+      setState(() => isConnecting = false);
+    }
+  }
+
+  void _openWifiConfigModal() async {
+    final result = await showModalBottomSheet<Map<String, String>>(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => WifiConfigModal(),
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedSsid = result['ssid'] ?? '';
+        password = result['password'] ?? '';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +114,8 @@ class ConfigureDeviceScreen extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.wifi),
               title: Text('WiFi Settings'),
-              subtitle: Text('Connected to HomeNetwork'),
+              subtitle: Text(selectedSsid.isEmpty ? 'Not configured' : 'SSID: \$selectedSsid'),
+              onTap: _openWifiConfigModal,
             ),
             ListTile(
               leading: Icon(Icons.developer_mode),
@@ -53,18 +125,31 @@ class ConfigureDeviceScreen extends StatelessWidget {
             ),
             Spacer(),
             ElevatedButton(
-              onPressed: () {
-                // Activation logic
-              },
-              child: Text('Load Configuration', style: TextStyle(color: Colors.white)),
+              onPressed: isConnecting ? null : _connectToWifi,
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
                 backgroundColor: Colors.blue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-                
               ),
+              child: isConnecting
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('Loading', style: TextStyle(color: Colors.white)),
+                        SizedBox(width: 10),
+                        SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Text('Load Configuration', style: TextStyle(color: Colors.white)),
             ),
           ],
         ),
