@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../wifi/wifi_config_modal.dart';
 import '../modals/status_modal.dart';
+import '../modals/language_modal.dart';
 
 class ConfigureDeviceScreen extends StatefulWidget {
   @override
@@ -13,6 +14,7 @@ class _ConfigureDeviceScreenState extends State<ConfigureDeviceScreen> {
   String selectedSsid = '';
   String password = '';
   bool isConnecting = false;
+  String _selectedLanguage = 'English';
 
   Future<void> _connectToWifi() async {
     if (selectedSsid.isEmpty || password.isEmpty) return;
@@ -54,23 +56,6 @@ class _ConfigureDeviceScreenState extends State<ConfigureDeviceScreen> {
     }
   }
 
-  void _openWifiConfigModal() async {
-    final result = await showModalBottomSheet<Map<String, String>>(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) => WifiConfigModal(),
-    );
-
-    if (result != null) {
-      setState(() {
-        selectedSsid = result['ssid'] ?? '';
-        password = result['password'] ?? '';
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +91,17 @@ class _ConfigureDeviceScreenState extends State<ConfigureDeviceScreen> {
             ),
             SizedBox(height: 10),
             ListTile(
-              leading: Icon(Icons.vpn_key),
-              title: Text('API Key'),
-              subtitle: Text('***************', style: TextStyle(letterSpacing: 3)),
-              trailing: Icon(Icons.lock),
+              leading: Icon(Icons.language),
+              title: Text('Language'),
+              subtitle: Text(_selectedLanguage),
+              trailing: Icon(Icons.arrow_drop_down),
+              onTap: _openLanguageModal,
+            ),
+            ListTile(
+              leading: Icon(Icons.bluetooth),
+              title: Text('Bluetooth Audio Device'),
+              subtitle: Text('Not connected'),
+              onTap: () {},
             ),
             ListTile(
               leading: Icon(Icons.wifi),
@@ -155,5 +147,32 @@ class _ConfigureDeviceScreenState extends State<ConfigureDeviceScreen> {
         ),
       ),
     );
+  }
+  void _openWifiConfigModal() async {
+    final result = await showModalBottomSheet<Map<String, String>>(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => WifiConfigModal(),
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedSsid = result['ssid'] ?? '';
+        password = result['password'] ?? '';
+      });
+    }
+  }
+  void _openLanguageModal() async {
+    final result = await showDialog<String>(
+      context: context,
+      builder: (_) => const LanguageModal(),
+    );
+
+    if (result != null && result != _selectedLanguage) {
+      setState(() => _selectedLanguage = result);
+    }
   }
 }
